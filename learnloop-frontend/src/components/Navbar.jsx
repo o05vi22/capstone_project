@@ -10,13 +10,25 @@ export default function Navbar() {
   };
 
   return (
-    <div style={{ padding: 12, borderBottom: "1px solid #ddd", display: "flex", gap: 12 }}>
-      <Link to="/"><b>LearnLoop</b></Link>
-      <Link to="/dashboard">Dashboard</Link>
-      <Link to="/skills">Skills</Link>
+    <div className="navbar">
+      <div className="nav-inner">
+        <Link to="/" className="brand">
+          <div className="brand-badge">LL</div>
+          <div>LearnLoop</div>
+        </Link>
 
-      <div style={{ marginLeft: "auto" }}>
-        {isLoggedIn() ? <button onClick={doLogout}>Logout</button> : <Link to="/login">Login</Link>}
+        <div className="nav-links">
+          <Link to="/dashboard">Dashboard</Link>
+          <Link to="/skills">Skills</Link>
+        </div>
+
+        <div className="nav-actions">
+          {isLoggedIn() ? (
+            <button className="btn btn-outline" onClick={doLogout}>Logout</button>
+          ) : (
+            <Link to="/login" className="btn btn-primary">Login</Link>
+          )}
+        </div>
       </div>
     </div>
   );

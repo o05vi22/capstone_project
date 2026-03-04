@@ -10,27 +10,18 @@ export default function Assessment() {
   const userId = Number(localStorage.getItem("userId")) || 1;
 
   const [questions, setQuestions] = useState([]);
-  const [answers, setAnswers] = useState({}); // {questionId: "A"}
-const getCategoryName = (skill) => {
-  if (!skill) return "Assessment";
-
-  const s = skill.toLowerCase();
-
-  if (["java", "python", "c++", "c", "cpp"].includes(s))
-    return "Programming Assessment";
-
-  if (s.includes("spring") || s.includes("node"))
-    return "Backend Assessment";
-
-  if (s.includes("mysql") || s.includes("mongo"))
-    return "Database Assessment";
-
-  if (s.includes("git"))
-    return "Git Assessment";
-
-  return skill + " Assessment";
-};
+  const [answers, setAnswers] = useState({});
   const [result, setResult] = useState(null);
+
+  const getCategoryName = (skill) => {
+    if (!skill) return "Assessment";
+    const s = skill.toLowerCase();
+    if (["java", "python", "c++", "c", "cpp"].includes(s)) return "Programming Assessment";
+    if (s.includes("spring") || s.includes("node")) return "Backend Assessment";
+    if (s.includes("mysql") || s.includes("mongo")) return "Database Assessment";
+    if (s.includes("git")) return "Git Assessment";
+    return skill + " Assessment";
+  };
 
   useEffect(() => {
     api.get(`/assessment/${skillName}/questions`)
@@ -53,28 +44,30 @@ const getCategoryName = (skill) => {
 
   if (result) {
     return (
-      <div style={{ padding: 20, maxWidth: 800, margin: "0 auto" }}>
-        <h2>Result - {skillName}</h2>
-        <p>Score: <b>{result.scorePercent}%</b></p>
-        <p>Correct: <b>{result.correctAnswers}</b> / {result.totalQuestions}</p>
-        <p>Status: <b>{result.passed ? "PASSED ✅" : "FAILED ❌"}</b></p>
-        {result.badgeGranted && <p>🎖 Badge granted! Trust increased.</p>}
+      <div className="container">
+        <div className="card card-pad">
+          <h2 className="section-title">Result - {skillName}</h2>
+          <p className="p">Score: <b>{result.scorePercent}%</b></p>
+          <p className="p">Correct: <b>{result.correctAnswers}</b> / {result.totalQuestions}</p>
+          <p className="p">Status: <b>{result.passed ? "PASSED ✅" : "FAILED ❌"}</b></p>
+          {result.badgeGranted && <p className="p">🎖 Badge granted! Trust increased.</p>}
 
-        <button onClick={() => nav("/dashboard")} style={{ marginTop: 12 }}>
-          Go to Dashboard
-        </button>
+          <button className="btn btn-primary" onClick={() => nav("/dashboard")} style={{ marginTop: 12 }}>
+            Go to Dashboard
+          </button>
+        </div>
       </div>
     );
   }
 
   return (
-    <div style={{ padding: 20, maxWidth: 900, margin: "0 auto" }}>
-      <h2>{getCategoryName(skillName)}</h2>
-      <p>Select the correct option and submit.</p>
+    <div className="container">
+      <h2 className="section-title">{getCategoryName(skillName)}</h2>
+      <p className="p">Select the correct option and submit.</p>
 
       {questions.map((q, index) => (
-        <div key={q.id} style={{ border: "1px solid #ddd", borderRadius: 10, padding: 12, marginTop: 12 }}>
-          <b>Q{index + 1}. {q.question}</b>
+        <div key={q.id} className="card card-pad q-card">
+          <div className="q-title">Q{index + 1}. {q.question}</div>
 
           {["A", "B", "C", "D"].map(opt => {
             const text =
@@ -84,7 +77,7 @@ const getCategoryName = (skill) => {
               q.optionD;
 
             return (
-              <label key={opt} style={{ display: "block", marginTop: 8 }}>
+              <label key={opt} className="option">
                 <input
                   type="radio"
                   name={`q-${q.id}`}
@@ -92,14 +85,16 @@ const getCategoryName = (skill) => {
                   checked={answers[q.id] === opt}
                   onChange={() => setAnswers(prev => ({ ...prev, [q.id]: opt }))}
                 />
-                {" "}{opt}. {text}
+                <div>
+                  <b>{opt}</b>. {text}
+                </div>
               </label>
             );
           })}
         </div>
       ))}
 
-      <button onClick={submit} style={{ marginTop: 16 }}>
+      <button className="btn btn-primary" onClick={submit} style={{ marginTop: 16 }}>
         Submit Assessment
       </button>
     </div>

@@ -10,7 +10,7 @@ export default function SkillsSetup() {
   const [needSkill, setNeedSkill] = useState("");
 
   const [knowLevel, setKnowLevel] = useState("BEGINNER");
-  const [needLevel, setNeedLevel] = useState("BEGINNER"); // optional but kept
+  const [needLevel, setNeedLevel] = useState("BEGINNER");
 
   const [knowList, setKnowList] = useState([]);
   const [needList, setNeedList] = useState([]);
@@ -35,7 +35,7 @@ export default function SkillsSetup() {
         userId,
         skillName: skillName.trim(),
         type,
-        level, // for NEED you can still send it; backend allows
+        level,
       });
 
       await loadLists();
@@ -47,14 +47,16 @@ export default function SkillsSetup() {
   };
 
   return (
-    <div style={{ padding: 20, maxWidth: 750, margin: "0 auto" }}>
-      <h2>Skills Setup</h2>
+    <div className="container">
+      <h2 className="section-title">Skills Setup</h2>
 
-      <div style={{ marginTop: 20, padding: 16, border: "1px solid #ddd", borderRadius: 10 }}>
-        <h3>Skills I Know</h3>
+      <div className="card card-pad panel">
+        <h3 style={{ margin: 0 }}>Skills I Know</h3>
+        <p className="p">Add the skills you can teach others.</p>
 
-        <div style={{ display: "flex", gap: 10, alignItems: "center", flexWrap: "wrap" }}>
+        <div className="row" style={{ marginTop: 12 }}>
           <input
+            className="input"
             placeholder="Type skill (e.g., Java, Photoshop)"
             value={knowSkill}
             onChange={(e) => setKnowSkill(e.target.value)}
@@ -66,57 +68,65 @@ export default function SkillsSetup() {
             <option value="ADVANCED">Advanced</option>
           </select>
 
-          <button onClick={() => assignSkill(knowSkill, "KNOW", knowLevel)}>Add</button>
+          <button className="btn btn-primary" onClick={() => assignSkill(knowSkill, "KNOW", knowLevel)}>
+            Add
+          </button>
         </div>
 
         <div style={{ marginTop: 12 }}>
           {knowList.length === 0 ? (
-            <p style={{ opacity: 0.7 }}>No KNOW skills added yet.</p>
+            <p className="p">No KNOW skills added yet.</p>
           ) : (
-            <ul>
+            <ul className="skill-list">
               {knowList.map((x, i) => <li key={i}>{x}</li>)}
             </ul>
           )}
         </div>
       </div>
 
-      <div style={{ marginTop: 20, padding: 16, border: "1px solid #ddd", borderRadius: 10 }}>
-        <h3>Skills I Need</h3>
+      <div className="card card-pad panel">
+        <h3 style={{ margin: 0 }}>Skills I Need</h3>
+        <p className="p">Add skills you want to learn.</p>
 
-        <div style={{ display: "flex", gap: 10, alignItems: "center", flexWrap: "wrap" }}>
+        <div className="row" style={{ marginTop: 12 }}>
           <input
+            className="input"
             placeholder="Type skill you want to learn (e.g., React)"
             value={needSkill}
             onChange={(e) => setNeedSkill(e.target.value)}
           />
 
-          {/* Optional: keep level even for NEED */}
           <select value={needLevel} onChange={(e) => setNeedLevel(e.target.value)}>
             <option value="BEGINNER">Beginner</option>
             <option value="MODERATE">Moderate</option>
             <option value="ADVANCED">Advanced</option>
           </select>
 
-          <button onClick={() => assignSkill(needSkill, "NEED", needLevel)}>Add</button>
+          <button className="btn btn-primary" onClick={() => assignSkill(needSkill, "NEED", needLevel)}>
+            Add
+          </button>
         </div>
 
         <div style={{ marginTop: 12 }}>
           {needList.length === 0 ? (
-            <p style={{ opacity: 0.7 }}>No NEED skills added yet.</p>
+            <p className="p">No NEED skills added yet.</p>
           ) : (
-            <ul>
+            <ul className="skill-list">
               {needList.map((x, i) => <li key={i}>{x}</li>)}
             </ul>
           )}
         </div>
       </div>
 
-      <button style={{ marginTop: 20 }} onClick={() => nav("/dashboard")}>
-        Continue to Dashboard
-      </button>
-      <button onClick={() => nav(`/assessment?skill=${encodeURIComponent(needSkill)}`)}>
-  Take Assessment for this Skill
-</button>
+      <div className="footer-actions">
+        <button className="btn btn-outline" onClick={() => nav("/dashboard")}>
+          Continue to Dashboard
+        </button>
+
+        <button className="btn btn-primary" onClick={() => nav(`/assessment?skill=${encodeURIComponent(needSkill)}`)}>
+          Take Assessment for this Skill
+        </button>
+      </div>
     </div>
   );
 }

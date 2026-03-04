@@ -13,31 +13,34 @@ export default function Register() {
     try {
       const res = await api.post("/auth/register", { name, email, password });
 
-      // store login session
       localStorage.setItem("userId", res.data.id);
       localStorage.setItem("userName", res.data.name);
       localStorage.setItem("userEmail", res.data.email);
 
-      nav("/skills"); // ✅ FLOW
+      nav("/skills");
     } catch (err) {
       alert(err?.response?.data?.error || "Register failed");
     }
   };
 
   return (
-    <div style={{ padding: 30, maxWidth: 450, margin: "0 auto" }}>
-      <h2>Create Account</h2>
+    <div className="container">
+      <div className="card card-pad form-card">
+        <h2 className="section-title" style={{ marginBottom: 6 }}>Create Account</h2>
+        <p className="p">Join LearnLoop and start exchanging skills.</p>
 
-      <form onSubmit={submit} style={{ display: "grid", gap: 10 }}>
-        <input placeholder="Name" value={name} onChange={(e) => setName(e.target.value)} />
-        <input placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
-        <input placeholder="Password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
-        <button type="submit">Register</button>
-      </form>
+        <form onSubmit={submit} className="form">
+          <input className="input" placeholder="Name" value={name} onChange={(e) => setName(e.target.value)} />
+          <input className="input" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
+          <input className="input" placeholder="Password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
 
-      <p style={{ marginTop: 12 }}>
-        Already have account? <Link to="/login">Login</Link>
-      </p>
+          <button className="btn btn-primary" type="submit">Register</button>
+        </form>
+
+        <p className="p" style={{ marginTop: 12 }}>
+          Already have an account? <Link to="/login" style={{ color: "var(--accent)", fontWeight: 700 }}>Login</Link>
+        </p>
+      </div>
     </div>
   );
 }

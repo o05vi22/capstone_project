@@ -12,36 +12,38 @@ export default function Dashboard() {
   }, []);
 
   return (
-    <div style={{ padding: 20 }}>
-      <h2>Dashboard</h2>
-
+    <div className="container" style={{ paddingTop: 0 }}>
       {users.length === 0 ? (
-        <p>No users found</p>
+        <div className="card card-pad">
+          <b>No users found</b>
+          <p className="p" style={{ marginTop: 8 }}>Try again later.</p>
+        </div>
       ) : (
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: 16 }}>
+        <div className="grid">
           {users.map((u) => (
-            <div key={u.id} style={{ border: "1px solid #ddd", borderRadius: 12, padding: 16 }}>
-              <h3 style={{ margin: 0 }}>{u.name}</h3>
-              <p style={{ marginTop: 6, opacity: 0.7 }}>{u.email}</p>
+            <div key={u.id} className="card card-pad user-card">
+              <h3>{u.name}</h3>
+              <p className="small">{u.email}</p>
 
-              <div style={{ marginTop: 10 }}>
-                <b>Know:</b>
-                <ul>
-                  {(u.knowSkills || []).map((s, i) => <li key={i}>{s}</li>)}
-                </ul>
+              <div className="skill-cols">
+                <div className="skill-box">
+                  <b>Know</b>
+                  <ul className="skill-list">
+                    {(u.knowSkills || []).map((s, i) => <li key={i}>{s}</li>)}
+                  </ul>
+                </div>
+
+                <div className="skill-box">
+                  <b>Need</b>
+                  <ul className="skill-list">
+                    {(u.needSkills || []).map((s, i) => <li key={i}>{s}</li>)}
+                  </ul>
+                </div>
               </div>
 
-              <div style={{ marginTop: 10 }}>
-                <b>Need:</b>
-                <ul>
-                  {(u.needSkills || []).map((s, i) => <li key={i}>{s}</li>)}
-                </ul>
-              </div>
-
-              <button style={{ marginTop: 10 }}>
+              <button className="btn btn-primary" style={{ marginTop: 14, width: "100%" }}>
                 Request to Learn from You
               </button>
-              
             </div>
           ))}
         </div>
