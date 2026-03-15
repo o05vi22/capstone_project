@@ -2,6 +2,9 @@ import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import ProtectedRoute from "./ProtectedRoute";
 
+import LearningModule from "./pages/LearningModule";
+import IncomingRequests from "./pages/IncomingRequests";
+
 import Landing from "./pages/Landing";
 import Register from "./pages/Register";
 import Login from "./pages/Login";
@@ -23,12 +26,15 @@ function AppContent() {
   "/profile",
   "/edit-profile",
   "/explore-users",
+  "/requests"
 ];
 
-  const shouldShowNavbar = !hideNavbarRoutes.includes(location.pathname);
+  const shouldShowNavbar = 
+  !hideNavbarRoutes.includes(location.pathname) &&
+  !location.pathname.startsWith("/learning"); 
 
   return (
-    <>
+        <>
       {shouldShowNavbar && <Navbar />}
 
       <Routes>
@@ -37,14 +43,31 @@ function AppContent() {
         <Route path="/login" element={<Login />} />
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />
+        <Route path="/learning/:skill" element={
+        <ProtectedRoute>
+          <LearningModule />
+        </ProtectedRoute>
+      }
+      />
+
         <Route
-  path="/explore-users"
-  element={
-    <ProtectedRoute>
-      <ExploreUsers />
-    </ProtectedRoute>
-  }
-/>
+          path="/explore-users"
+          element={
+            <ProtectedRoute>
+              <ExploreUsers />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/requests"
+          element={
+            <ProtectedRoute>
+              <IncomingRequests />
+            </ProtectedRoute>
+          }
+        />
+
         <Route
           path="/skills"
           element={
@@ -53,6 +76,7 @@ function AppContent() {
             </ProtectedRoute>
           }
         />
+
         <Route
           path="/dashboard"
           element={
@@ -61,6 +85,7 @@ function AppContent() {
             </ProtectedRoute>
           }
         />
+
         <Route
           path="/assessment"
           element={
@@ -69,6 +94,7 @@ function AppContent() {
             </ProtectedRoute>
           }
         />
+
         <Route
           path="/profile"
           element={
@@ -77,6 +103,7 @@ function AppContent() {
             </ProtectedRoute>
           }
         />
+
         <Route
           path="/edit-profile"
           element={

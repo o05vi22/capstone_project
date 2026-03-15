@@ -8,5 +8,6 @@ import com.learnloop.learnloop.model.UserSkill;
 
 public interface UserSkillRepository extends JpaRepository<UserSkill, Long> {
     List<UserSkill> findByUser(User user);
+    List<UserSkill> findByUserId(Long userId);
     boolean existsByUserIdAndSkillIdAndType(Long userId, Long skillId, String type);
 }

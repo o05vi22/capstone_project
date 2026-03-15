@@ -344,4 +344,4 @@ Palindrome
       )}
     </div>
   );
-}yes
+}

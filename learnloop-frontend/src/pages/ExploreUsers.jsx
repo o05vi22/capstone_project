@@ -5,6 +5,7 @@ import { api } from "../api";
 export default function ExploreUsers() {
   const navigate = useNavigate();
   const [users, setUsers] = useState([]);
+  const [requestedUsers, setRequestedUsers] = useState([]);
 
   const currentUserId = localStorage.getItem("userId");
 
@@ -15,12 +16,45 @@ export default function ExploreUsers() {
   const fetchUsers = async () => {
     try {
       const res = await api.get("/users");
+
       const filteredUsers = res.data.filter(
         (user) => String(user.id) !== String(currentUserId)
       );
+
       setUsers(filteredUsers);
     } catch (error) {
       console.error("Error fetching users:", error);
+    }
+  };
+
+  // SEND REQUEST
+  const sendRequest = async (receiverId, skill) => {
+    try {
+      const senderId = localStorage.getItem("userId");
+
+      // prevent duplicate request in UI
+      if (requestedUsers.includes(receiverId)) {
+        alert("You already sent a request to this user.");
+        return;
+      }
+
+      await api.post("/requests", {
+        senderId: senderId,
+        receiverId: receiverId,
+        skillName: skill || "General Skill",
+      });
+
+      setRequestedUsers([...requestedUsers, receiverId]);
+
+      alert("Request sent successfully!");
+    } catch (error) {
+      console.error("Request error:", error);
+
+      if (error.response?.data?.message === "Request already exists") {
+        alert("Request already sent!");
+      } else {
+        alert("Failed to send request");
+      }
     }
   };
 
@@ -159,6 +193,17 @@ export default function ExploreUsers() {
       fontWeight: "600",
       cursor: "pointer",
     },
+    disabledBtn: {
+      flex: 1,
+      padding: "12px",
+      border: "none",
+      borderRadius: "10px",
+      background: "#94a3b8",
+      color: "#fff",
+      fontSize: "15px",
+      fontWeight: "600",
+      cursor: "not-allowed",
+    },
   };
 
   return (
@@ -173,10 +218,21 @@ export default function ExploreUsers() {
           <span style={styles.navItem} onClick={() => navigate("/dashboard")}>
             Dashboard
           </span>
+
+          <span style={styles.navItem}
+            onClick={() => navigate("/requests")}
+          >
+            Requests
+          </span>
+
           <span style={styles.navItem} onClick={() => navigate("/skills")}>
             Skills
           </span>
-          <span style={styles.navItem} onClick={() => navigate("/explore-users")}>
+
+          <span
+            style={styles.navItem}
+            onClick={() => navigate("/explore-users")}
+          >
             Explore Users
           </span>
           <span style={styles.navItem} onClick={() => navigate("/profile")}>
@@ -199,10 +255,20 @@ export default function ExploreUsers() {
               <p style={styles.email}>{user.email}</p>
 
               <h3 style={styles.label}>Skills Known</h3>
-              <p style={styles.text}>{user.skillsKnown || "Not added"}</p>
+
+              <p style={styles.text}>
+                {user.knowSkills && user.knowSkills.length > 0
+                  ? user.knowSkills.join(", ")
+                  : "Not added"}
+              </p>
 
               <h3 style={styles.label}>Skills Need</h3>
-              <p style={styles.text}>{user.skillsNeed || "Not added"}</p>
+
+              <p style={styles.text}>
+                {user.needSkills && user.needSkills.length > 0
+                  ? user.needSkills.join(", ")
+                  : "Not added"}
+              </p>
 
               <div style={styles.buttonRow}>
                 <button
@@ -213,10 +279,19 @@ export default function ExploreUsers() {
                 </button>
 
                 <button
-                  style={styles.requestBtn}
-                  onClick={() => alert(`Request sent to ${user.name}`)}
+                  style={
+                    requestedUsers.includes(user.id)
+                      ? styles.disabledBtn
+                      : styles.requestBtn
+                  }
+                  disabled={requestedUsers.includes(user.id)}
+                  onClick={() =>
+                    sendRequest(user.id, user.knowSkills?.[0])
+                  }
                 >
-                  Request
+                  {requestedUsers.includes(user.id)
+                    ? "Requested"
+                    : "Request"}
                 </button>
               </div>
             </div>
