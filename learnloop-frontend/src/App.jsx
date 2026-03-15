@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import ProtectedRoute from "./ProtectedRoute";
 
@@ -8,25 +8,43 @@ import Login from "./pages/Login";
 import SkillsSetup from "./pages/SkillsSetup";
 import Dashboard from "./pages/Dashboard";
 import Assessment from "./pages/Assessment";
-export default function App() {
+import About from "./pages/About";
+import Contact from "./pages/Contact";
+import ProfilePage from "./pages/ProfilePage";
+import EditProfile from "./pages/EditProfile";
+import ExploreUsers from "./pages/ExploreUsers";
+function AppContent() {
+  const location = useLocation();
+
+  const hideNavbarRoutes = [
+  "/dashboard",
+  "/skills",
+  "/assessment",
+  "/profile",
+  "/edit-profile",
+  "/explore-users",
+];
+
+  const shouldShowNavbar = !hideNavbarRoutes.includes(location.pathname);
+
   return (
-    <BrowserRouter>
-      <Navbar />
+    <>
+      {shouldShowNavbar && <Navbar />}
 
       <Routes>
-        {/* Public */}
         <Route path="/" element={<Landing />} />
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
-<Route
-  path="/assessment"
+        <Route path="/about" element={<About />} />
+        <Route path="/contact" element={<Contact />} />
+        <Route
+  path="/explore-users"
   element={
     <ProtectedRoute>
-      <Assessment />
+      <ExploreUsers />
     </ProtectedRoute>
   }
 />
-        {/* Protected */}
         <Route
           path="/skills"
           element={
@@ -43,7 +61,39 @@ export default function App() {
             </ProtectedRoute>
           }
         />
+        <Route
+          path="/assessment"
+          element={
+            <ProtectedRoute>
+              <Assessment />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/profile"
+          element={
+            <ProtectedRoute>
+              <ProfilePage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/edit-profile"
+          element={
+            <ProtectedRoute>
+              <EditProfile />
+            </ProtectedRoute>
+          }
+        />
       </Routes>
+    </>
+  );
+}
+
+export default function App() {
+  return (
+    <BrowserRouter>
+      <AppContent />
     </BrowserRouter>
   );
 }

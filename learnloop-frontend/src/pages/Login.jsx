@@ -15,9 +15,19 @@ export default function Login() {
     try {
       const res = await api.post("/auth/login", { email, password });
 
+      // existing storage
       localStorage.setItem("userId", res.data.id);
       localStorage.setItem("userName", res.data.name);
       localStorage.setItem("userEmail", res.data.email);
+
+      // NEW → store user object for profile
+      localStorage.setItem(
+        "user",
+        JSON.stringify({
+          name: res.data.name,
+          email: res.data.email
+        })
+      );
 
       localStorage.setItem("token", "logged_in");
 
@@ -54,7 +64,10 @@ export default function Login() {
         </form>
 
         <p className="p" style={{ marginTop: 12 }}>
-          New user? <Link to="/register" style={{ color: "var(--accent)", fontWeight: 700 }}>Register</Link>
+          New user?{" "}
+          <Link to="/register" style={{ color: "var(--accent)", fontWeight: 700 }}>
+            Register
+          </Link>
         </p>
       </div>
     </div>
