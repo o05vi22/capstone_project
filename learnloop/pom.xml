@@ -64,6 +64,7 @@
 			<scope>test</scope>
 		</dependency>
 
+<<<<<<< HEAD
 
 
 	 <!-- Swagger / OpenAPI -->
@@ -74,6 +75,8 @@
         </dependency>
 
 
+=======
+>>>>>>> 94b9ca782b42f65255644e8ec090328b360fd354
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-security-test</artifactId>

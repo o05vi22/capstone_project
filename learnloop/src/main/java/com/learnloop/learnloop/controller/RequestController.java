@@ -18,9 +18,15 @@ public class RequestController {
     private final SkillRequestRepository repo;
     private final UserRepository userRepository;
 
+<<<<<<< HEAD
     public RequestController(SkillRequestRepository repo, UserRepository userRepository){
         this.repo = repo;
         this.userRepository = userRepository;
+=======
+    public RequestController(SkillRequestRepository repo,UserRepository userRepository){
+        this.repo = repo;
+        this.userRepository=userRepository;
+>>>>>>> 94b9ca782b42f65255644e8ec090328b360fd354
     }
 
     // Send Request
@@ -30,8 +36,13 @@ public class RequestController {
         return repo.save(req);
     }
 
+<<<<<<< HEAD
     // Incoming requests (receiver side)
     @GetMapping("/incoming/{userId}")
+=======
+    // Incoming requests (for receiver)
+   @GetMapping("/incoming/{userId}")
+>>>>>>> 94b9ca782b42f65255644e8ec090328b360fd354
     public List<RequestResponse> incoming(@PathVariable Long userId){
 
         List<SkillRequest> requests = repo.findByReceiverId(userId);
@@ -39,12 +50,21 @@ public class RequestController {
         return requests.stream().map(req -> {
 
             User sender = userRepository.findById(req.getSenderId()).orElse(null);
+<<<<<<< HEAD
             User receiver = userRepository.findById(req.getReceiverId()).orElse(null);
 
             return new RequestResponse(
                     req.getId(),
                     sender != null ? sender.getName() : "Unknown",
                     receiver != null ? receiver.getName() : "Unknown",
+=======
+
+            return new RequestResponse(
+                    req.getId(),
+                    req.getSenderId(),
+                    sender != null ? sender.getName() : "Unknown",
+                    sender != null ? sender.getEmail() : "",
+>>>>>>> 94b9ca782b42f65255644e8ec090328b360fd354
                     req.getSkillName(),
                     req.getStatus()
             );
@@ -52,7 +72,10 @@ public class RequestController {
         }).toList();
     }
 
+<<<<<<< HEAD
     // Sent requests (sender side)
+=======
+>>>>>>> 94b9ca782b42f65255644e8ec090328b360fd354
     @GetMapping("/learning/sent/{userId}")
     public List<RequestResponse> sent(@PathVariable Long userId){
 
@@ -60,20 +83,32 @@ public class RequestController {
 
         return requests.stream().map(req -> {
 
+<<<<<<< HEAD
             User sender = userRepository.findById(req.getSenderId()).orElse(null);
+=======
+>>>>>>> 94b9ca782b42f65255644e8ec090328b360fd354
             User receiver = userRepository.findById(req.getReceiverId()).orElse(null);
 
             return new RequestResponse(
                     req.getId(),
+<<<<<<< HEAD
                     sender != null ? sender.getName() : "Unknown",
                     receiver != null ? receiver.getName() : "Unknown",
+=======
+                    req.getReceiverId(),
+                    receiver != null ? receiver.getName() : "Unknown",
+                    receiver != null ? receiver.getEmail() : "",
+>>>>>>> 94b9ca782b42f65255644e8ec090328b360fd354
                     req.getSkillName(),
                     req.getStatus()
             );
 
         }).toList();
     }
+<<<<<<< HEAD
 
+=======
+>>>>>>> 94b9ca782b42f65255644e8ec090328b360fd354
     // Accept request
     @PutMapping("/{id}/accept")
     public SkillRequest accept(@PathVariable Long id){

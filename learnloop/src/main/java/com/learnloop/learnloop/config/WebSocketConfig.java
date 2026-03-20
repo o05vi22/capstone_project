@@ -25,8 +25,14 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
                 .setAllowedOriginPatterns("*")  // Allow all origins for development
                 .withSockJS();
         
+<<<<<<< HEAD
         // // Also add a plain WebSocket endpoint (optional)
         // registry.addEndpoint("/chat")
         //         .setAllowedOriginPatterns("*");
+=======
+        // Also add a plain WebSocket endpoint (optional)
+        registry.addEndpoint("/chat")
+                .setAllowedOriginPatterns("*");
+>>>>>>> 94b9ca782b42f65255644e8ec090328b360fd354
     }
 }

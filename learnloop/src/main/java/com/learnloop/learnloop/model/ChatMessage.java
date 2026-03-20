@@ -5,7 +5,11 @@ import jakarta.persistence.*;
 @Entity
 @Table(name = "chat_message")
 public class ChatMessage {
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 94b9ca782b42f65255644e8ec090328b360fd354
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
