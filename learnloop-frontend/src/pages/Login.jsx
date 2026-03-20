@@ -15,25 +15,38 @@ export default function Login() {
     try {
       const res = await api.post("/auth/login", { email, password });
 
-      // existing storage
-      localStorage.setItem("userId", res.data.id);
-      localStorage.setItem("userName", res.data.name);
-      localStorage.setItem("userEmail", res.data.email);
+      // SAFE EXTRACTION
+      const userData = res.data;
 
-      // NEW → store user object for profile
+      if (!userData || !userData.name) {
+        alert("Invalid login response");
+        return;
+      }
+
+      // STORE DATA - FIXED: Store name in multiple places for redundancy
+      localStorage.setItem("name", userData.name); // Primary
+      localStorage.setItem("userId", userData.id);
+      localStorage.setItem("userName", userData.name); // Secondary
+      localStorage.setItem("userEmail", userData.email);
+
+      // Also store full user object
       localStorage.setItem(
         "user",
         JSON.stringify({
-          name: res.data.name,
-          email: res.data.email
+          name: userData.name,
+          email: userData.email,
+          id: userData.id
         })
       );
 
       localStorage.setItem("token", "logged_in");
 
+      console.log("LOGIN SUCCESS - Stored name:", userData.name);
+
       const redirectTo = location.state?.from || "/skills";
       nav(redirectTo);
     } catch (err) {
+      console.error("Login error:", err);
       alert(err?.response?.data?.error || "Login failed");
     }
   };
@@ -51,7 +64,6 @@ export default function Login() {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
           />
-
           <input
             className="input"
             placeholder="Password"
@@ -59,13 +71,17 @@ export default function Login() {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
-
-          <button className="btn btn-primary" type="submit">Login</button>
+          <button className="btn btn-primary" type="submit">
+            Login
+          </button>
         </form>
 
         <p className="p" style={{ marginTop: 12 }}>
           New user?{" "}
-          <Link to="/register" style={{ color: "var(--accent)", fontWeight: 700 }}>
+          <Link
+            to="/register"
+            style={{ color: "var(--accent)", fontWeight: 700 }}
+          >
             Register
           </Link>
         </p>

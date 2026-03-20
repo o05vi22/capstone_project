@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.*;
 import com.learnloop.learnloop.dto.request.AssignSkillRequest;
 import com.learnloop.learnloop.dto.response.UserSkillResponse;
 import com.learnloop.learnloop.model.Skill;
-import com.learnloop.learnloop.model.UserSkill;
 import com.learnloop.learnloop.service.SkillService;
 
 @RestController
